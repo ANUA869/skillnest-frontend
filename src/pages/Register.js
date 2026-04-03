@@ -1,34 +1,46 @@
+import { useState } from "react";
+import axios from "axios";
+
 function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async () => {
+    try {
+      const res = await axios.post(
+        "https://skillnest-backend-g385.onrender.com/api/auth/register",
+        {
+          name,
+          email,
+          password,
+        }
+      );
+
+      alert(res.data.message);
+      window.location.href = "/login";
+    } catch (err) {
+      console.log(err.response?.data || err.message);
+      alert(err.response?.data?.msg || "Registration failed ❌");
+    }
+  };
+
   return (
-    <div style={{ padding: "30px", textAlign: "center" }}>
+    <div style={{ padding: "30px" }}>
       <h2>Register</h2>
 
-      <div
-        style={{
-          maxWidth: "300px",
-          margin: "auto",
-          background: "white",
-          padding: "20px",
-          borderRadius: "10px",
-        }}
-      >
-        <input placeholder="Name" style={{ width: "100%", marginBottom: "10px", padding: "8px" }} />
-        <input placeholder="Email" style={{ width: "100%", marginBottom: "10px", padding: "8px" }} />
-        <input placeholder="Password" style={{ width: "100%", marginBottom: "10px", padding: "8px" }} />
+      <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+      <br /><br />
 
-        <button
-          style={{
-            width: "100%",
-            padding: "10px",
-            background: "#22c55e",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-          }}
-        >
-          Register
-        </button>
-      </div>
+      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+      <br /><br />
+
+      <input type="password" placeholder="Password"
+        onChange={(e) => setPassword(e.target.value)} />
+
+      <br /><br />
+
+      <button onClick={handleRegister}>Register</button>
     </div>
   );
 }
