@@ -2,23 +2,21 @@ import { useState } from "react";
 import axios from "axios";
 
 function Login() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-  "https://skillnest-backend-g385.onrender.com/api/auth/login",
-  formData
-)
+        "https://skillnest-backend-g385.onrender.com/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
-      // ✅ SAVE USER
+      console.log(res.data);
+
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("token", res.data.token);
 
@@ -26,50 +24,36 @@ function Login() {
 
       window.location.href = "/dashboard";
     } catch (err) {
-      console.log(err);
+      console.log(err.response?.data || err.message);
       alert(err.response?.data?.msg || "Login failed ❌");
     }
   };
 
   return (
     <div style={{ padding: "30px" }}>
-      <h2>Login 🔐</h2>
+      <h2>Login</h2>
 
       <input
         type="email"
-        name="email"
-        placeholder="Email"
-        onChange={handleChange}
-        style={inputStyle}
+        placeholder="Enter email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
+
+      <br /><br />
 
       <input
         type="password"
-        name="password"
-        placeholder="Password"
-        onChange={handleChange}
-        style={inputStyle}
+        placeholder="Enter password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button onClick={handleLogin} style={btnStyle}>
-        Login
-      </button>
+      <br /><br />
+
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 }
-
-const inputStyle = {
-  display: "block",
-  marginBottom: "10px",
-  padding: "10px",
-  width: "250px",
-};
-
-const btnStyle = {
-  padding: "10px",
-  background: "#2563eb",
-  color: "white",
-  border: "none",
-};
 
 export default Login;
