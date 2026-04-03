@@ -11,14 +11,17 @@ function Dashboard() {
     if (!user) return;
 
     axios
-      .get(`http://localhost:8000/api/courses/enrolled/${user._id}`)
+      .get(
+        `https://skillnest-backend-g385.onrender.com/api/courses/enrolled/${user._id}`
+      )
       .then((res) => {
-        setEnrolledCourses(res.data);
+        setEnrolledCourses(Array.isArray(res.data) ? res.data : []);
       })
       .catch((err) => {
         console.log("ERROR:", err);
+        setEnrolledCourses([]);
       });
-  }, []);
+  }, [user]); // ✅ FIXED DEPENDENCY
 
   if (!user) {
     return (
