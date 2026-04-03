@@ -14,9 +14,9 @@ function Login() {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "https://skillnest-backend-g385.onrender.com",
-        form
-      );
+  "https://skillnest-backend-g385.onrender.com/api/auth/login",
+  formData
+)
 
       // ✅ SAVE USER
       localStorage.setItem("user", JSON.stringify(res.data.user));
